@@ -1,0 +1,4 @@
+{
+	"mongoURI": "mongodb://localhost/mgs_db",
+	"jwtSecret": "mgsjwtsecretkey_hgfjsd####ajgs"
+}
