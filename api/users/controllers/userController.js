@@ -14,4 +14,20 @@ router.get('/', (req, res) => {
 	res.json({ mesg: 'Hello World!' });
 });
 
+// @route GET api/users
+// @des test user route
+// @access public
+
+router.get('/register', (req, res) => {
+	res.json({ mesg: 'Hello World!' });
+});
+
+// @route GET api/users
+// @des test user route
+// @access public
+
+router.get('/login', (req, res) => {
+	res.json({ mesg: 'Hello World!' });
+});
+
 module.exports = router;
