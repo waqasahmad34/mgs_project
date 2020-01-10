@@ -1,4 +1,8 @@
 {
 	"mongoURI": "mongodb://localhost/mgs_db",
-	"jwtSecret": "mgsjwtsecretkey_hgfjsd####ajgs"
+	"jwtSecret": "mgsjwtsecretkey_hgfjsd####ajgs",
+	"email": "myguardiansixtesting@gmail.com",
+	"password": "myguardiansix6",
+	"stripePublishableKey": "pk_test_zUhyj8ZMBmTo47pBoatw0bjR00IcOkekhF",
+	"stripeSecretKey": "sk_test_nxJqnIMdYpm8n6fVQvxGFeGU00FWevmEYX"
 }

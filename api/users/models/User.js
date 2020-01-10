@@ -77,6 +77,9 @@ const userSchema = new Schema({
 	},
 	deviceSearch: {
 		type: String
+	},
+	expirationDate: {
+		type: Date
 	}
 });
 
