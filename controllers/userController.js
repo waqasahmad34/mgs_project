@@ -3,12 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('config');
-const moment = require('moment');
 const stripe = require('stripe')(config.get('stripeSecretKey'));
 const { check, validationResult } = require('express-validator');
-const sendRestPassEmail = require('../../../shared/sendRestPassEmail');
+const sendRestPassEmail = require('../lib/utils/sendRestPassEmail');
 const User = require('../models/User');
-const auth = require('../../../middleware/auth');
+const auth = require('../middleware/auth');
 
 // @route GET api/users
 // @des test user route

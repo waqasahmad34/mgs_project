@@ -1,5 +1,5 @@
 {
-	"mongoURI": "mongodb://localhost/mgs_db",
+	"mongoURI": "mongodb+srv://myguardiansix:myguardiansix6@cluster0-eyhba.mongodb.net/test?retryWrites=true&w=majority",
 	"jwtSecret": "mgsjwtsecretkey_hgfjsd####ajgs",
 	"email": "myguardiansixtesting@gmail.com",
 	"password": "myguardiansix6",

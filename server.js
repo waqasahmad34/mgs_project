@@ -12,7 +12,7 @@ app.use(express.json({ extented: false }));
 
 // Routes to check endpoints
 
-app.use('/api/users', require('./api/users/controllers/userController'));
+app.use('/api/users', require('./controllers/userController'));
 
 // Server PORT
 
