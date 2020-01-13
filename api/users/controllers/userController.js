@@ -3,7 +3,6 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('config');
-const crypto = require('crypto');
 const moment = require('moment');
 const stripe = require('stripe')(config.get('stripeSecretKey'));
 const { check, validationResult } = require('express-validator');
@@ -97,7 +96,7 @@ router.post(
 				paymentMethod: [
 					{
 						type: 'card',
-						token: stripeToken
+						token: charge.id
 					}
 				]
 			});
@@ -191,13 +190,11 @@ router.post(
 			if (!user) {
 				return res.status(404).json({ msg: 'User not Found!' });
 			}
-
-			const expirationDate = moment(new Date()).add(10, 'm');
-
-			user.expirationDate = expirationDate;
-			await user.save();
-			//const token = crypto.randomBytes(20).toString('hex');
-			const link = `http://localhost:3000/reset/${user._id}`;
+			const payload = { id: user._id };
+			const token = jwt.sign(payload, config.get('jwtSecret'), {
+				expiresIn: '2m' // 2 minutes
+			});
+			const link = `http://localhost:3000/reset/${user._id}/${token}`;
 			await sendRestPassEmail(user, link);
 			return res.status(200).json({ msg: 'Email Sent!' });
 		} catch (error) {
@@ -212,7 +209,7 @@ router.post(
 // @access public
 
 router.post(
-	'/forgetPassword/:userId',
+	'/forgetPassword/:userId/:token',
 	[ check('password', 'Password is required').isLength({ min: 6 }).exists().notEmpty() ],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -225,23 +222,21 @@ router.post(
 			if (!user) {
 				return res.status(404).json({ msg: 'User not Found!' });
 			}
-			// console.log(new Date());
-			// var date = moment(new Date()).add(2, 'm');
-			// var test = moment(new Date()).isBefore(date);
-			// res.send(test);
-			const currentDate = moment(new Date());
-			const expirationDate = moment(user.expirationDate);
-			console.log('date: ', currentDate.isBefore(expirationDate));
-			if (currentDate.isBefore(expirationDate)) {
-				const salt = await bcrypt.genSalt(10);
-				user.password = await bcrypt.hash(password, salt);
-				await user.save();
-
-				return res.status(200).json({ msg: 'Password is Changed!' });
+			const decode = jwt.verify(req.params.token, config.get('jwtSecret'));
+			if (!decode) {
+				return res.status(400).json({ msg: 'Link Expired,Please Generate Again' });
 			}
-			return res.status(400).json({ msg: 'Link Expired,Please Generate Again' });
+
+			const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(password, salt);
+			await user.save();
+
+			return res.status(200).json({ msg: 'Password Changed Successfully!' });
 		} catch (error) {
 			console.error(error.message);
+			if (error.message === 'jwt expired') {
+				return res.status(400).json({ msg: 'Link Expired,Please Generate Again' });
+			}
 			return res.status(500).json({ msg: 'Server error' });
 		}
 	}

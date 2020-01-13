@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const config = require('config');
 
 const sendResetPassEmail = (user, link) => {
-	const output = `Hi <strong>${user.firstName} ${user.lastName}!</strong><br> Here is Your Reset Password Link <strong>${link}</strong> Which is only valid for 2 minutes `;
+	const output = `Hi <strong>${user.firstName} ${user.lastName}!</strong><br> Here is Your Reset Password Link, Please Click: <strong><a href='${link}'>Here</a></strong> Which is only valid for 2 minutes `;
 
 	// create reusable transporter object using the default SMTP transport
 	let transporter = nodemailer.createTransport({

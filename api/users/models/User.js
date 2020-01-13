@@ -78,8 +78,9 @@ const userSchema = new Schema({
 	deviceSearch: {
 		type: String
 	},
-	expirationDate: {
-		type: Date
+	createdAt: {
+		type: Date,
+		default: new Date()
 	}
 });
 
